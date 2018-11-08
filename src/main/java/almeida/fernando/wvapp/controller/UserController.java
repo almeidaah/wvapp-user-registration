@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*") //Already added in WebSecurity - keeping just in case :)
@@ -18,15 +19,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UserController(BCryptPasswordEncoder bCryptPasswordEncoder){
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
     @PostMapping("/sign-up")
     public ResponseEntity<User> saveUser(@RequestBody User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -34,5 +28,14 @@ public class UserController {
     @GetMapping
     public List<User> getAll(){
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable  String id){
+        Optional<User> dbUser = userService.findUser(id);
+        if(dbUser.isPresent()){
+            return new ResponseEntity<>(dbUser.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(dbUser.get(), HttpStatus.NOT_FOUND);
     }
 }
