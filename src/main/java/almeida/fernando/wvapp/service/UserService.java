@@ -1,23 +1,25 @@
 package almeida.fernando.wvapp.service;
 
+import almeida.fernando.wvapp.model.Marker;
 import almeida.fernando.wvapp.model.User;
+import almeida.fernando.wvapp.repository.MarkerRepository;
 import almeida.fernando.wvapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
+    @Autowired
+    MarkerRepository markerRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -30,8 +32,21 @@ public class UserService {
             userRepository.save(user);
             return;
         }
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setMarkerList(Collections.emptyList());
+
+        Marker m = new Marker();
+        m.setLatitude(-27.5973);
+        m.setLongitude(-48.5499);
+        m.setContent("MEU TEXTO");
+
+        Marker m2 = new Marker();
+        m2.setLatitude(-27.5973);
+        m2.setLongitude(-48.5499);
+        m2.setContent("MEU TEXTO M2");
+
+        markerRepository.saveAll(Arrays.asList(m, m2));
+        user.getMarkerList().addAll(Arrays.asList(m, m2));
         userRepository.insert(user);
     }
 
