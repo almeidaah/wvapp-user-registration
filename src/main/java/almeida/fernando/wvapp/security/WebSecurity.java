@@ -39,6 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
                 //to be removed (just for dev purposes)
                 .antMatchers(HttpMethod.GET, "/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/markers/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
