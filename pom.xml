@@ -71,6 +71,41 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<id>dev</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>
+							src/main/resources/dev
+						</directory>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>prod</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>
+							src/main/resources/prod
+						</directory>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
+
+
+
 	<build>
 		<plugins>
 			<plugin>
