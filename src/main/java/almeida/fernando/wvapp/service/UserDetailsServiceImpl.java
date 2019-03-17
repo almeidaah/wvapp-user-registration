@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 
@@ -17,7 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        if(StringUtils.isEmpty(username))
+            throw new UsernameNotFoundException("User name is empty");
+
         almeida.fernando.wvapp.model.User user = userService.loadUserByUsername(username);
+
         if(user == null){
             throw new UsernameNotFoundException(username);
         }

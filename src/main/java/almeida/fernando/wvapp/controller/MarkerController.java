@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("*") //Already added in WebSecurity - keeping just in case :)
 @RequestMapping("/markers")
 public class MarkerController {
 
-    @Autowired
     MarkerService markerService;
+
+    public MarkerController(MarkerService markerService){
+        this.markerService = markerService;
+    }
 
     @PostMapping("/{userId}")
     public ResponseEntity<Marker> addMarker(@PathVariable String userId, @RequestBody Marker marker){

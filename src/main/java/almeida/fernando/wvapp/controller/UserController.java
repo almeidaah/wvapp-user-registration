@@ -12,17 +12,24 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*") //Already added in WebSecurity - keeping just in case :)
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     UserService userService;
+
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<User> saveUser(@RequestBody User user){
-        userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        try{
+            userService.save(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     @GetMapping
